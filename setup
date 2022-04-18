@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# 1. venv
+python3.10 -m venv .
+source bin/activate
+pip install --upgrade pip setuptools wheel
+
+# 2. Dependencies
+bash deps
+
+# 3. Rdkit-pypi
+pip install rdkit-pypi
+
+# 4. ODDT
+pip install oddt
+
+# 5. pdb-tools
+pip install pdb-tools
+
+# 6. scikit-learn persistence
+# sklearn-json: https://pypi.org/project/sklearn-json/
+# scikit2pmml: https://pypi.org/project/scikit2pmml/
+# skl2onnx: https://pypi.org/project/skl2onnx/
+pip install joblib sklearn-json
+pip install sklearn2pmml
+# ***************************
+# ***************************
+# RUN TARGET PREDICTION
+# ***************************
+# ***************************
+# Taken from: https://github.com/ShirleyWISiu/LigTMap#how-to-run-target-prediction
+# 
+# 1. Prepare your molecule(s) to be predicted in input.smi, e.g. our 
+# benchmark molecules for HIV. Make sure you don't leave any empty lines 
+# in the file:
+'''
+c1ccccc1Oc(ccc2)c(c23)n(c(=O)[nH]3)CC
+c1c(C)cc(C)cc1Oc(ccc2)c(c23)n(c(=O)[nH]3)CC
+N#Cc(c1)cc(Cl)cc1Oc(ccc2)c(c23)n(c(=O)[nH]3)CC
+N#Cc(c1)cc(Cl)cc1Oc(ccc2)c(c23)n(C)c(=O)[nH]3
+'''
+
+# 2. Prepare the list of targets in target.lst. 
+# For a complete list of supported targets, refer to
+# https://github.com/siuwengin/LigTMap/blob/master/target.lst
+'''
+HIV
+HCV
+'''
+
+# 3. Run the prediction
+export PATH=$HOME/opt/psovina-2.0:$PATH
+export LIGTMAP=$PWD
+export MGLTools=$HOME/opt/mgltools_x86_64Linux2_1.5.7/
+export PERSISTED_FMT=pickle
+export MIN_LIG_SIM=0.5
+export MIN_BIN_SIM=0.5
+export MIN_LTM_SIM=0.5
+
+./predict

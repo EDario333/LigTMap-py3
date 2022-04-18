@@ -16,6 +16,18 @@ echo -n "  MGLTools location: "
 printenv MGLTools  || { echo "variable not defined.. ERROR"; checkfail=1; }
 [ ! -d $MGLTools ]  && { echo "           but directory not exist.. ERROR"; checkfail=1; }
 
+echo -n "  Model persisted format: "
+printenv PERSISTED_FMT  || { echo "variable not defined.. ERROR"; checkfail=1; }
+
+echo -n "  Minimal ligand similarity score: "
+printenv MIN_LIG_SIM  || { echo "variable not defined.. ERROR"; checkfail=1; }
+
+echo -n "  Minimal binding similarity score: "
+printenv MIN_BIN_SIM  || { echo "variable not defined.. ERROR"; checkfail=1; }
+
+echo -n "  Minimal LigTMap similarity score: "
+printenv MIN_LTM_SIM  || { echo "variable not defined.. ERROR"; checkfail=1; }
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
    echo -n "  gsplit for darwin only: "
    command -v gsplit || { echo "command not found.. ERROR"; checkfail=1; }
@@ -125,10 +137,12 @@ for var in $(seq -f "%05g" 0 $ligN); do
 		echo "=============================="
 		mkdir "$JobHomeDir""/Output/Input_""$var""/""$i"
 		mkdir "$JobHomeDir""/Output/Input_""$var""/""$i""/Complex"
-		python "$LIGTMAP""/ligtmap.py" "$InputDir""/input_""$var" $var $i $tarN ${LIGTMAP}/ ####2> /dev/null 
+		python "$LIGTMAP""/ligtmap_py3.py" "$InputDir""/input_""$var" $var $i $tarN ${LIGTMAP}/ $PERSISTED_FMT
 		echo
 	done
 done
+
+python "$LIGTMAP""/bests.py" "$JobHomeDir""/Output/Input_""$var" $MIN_LIG_SIM $MIN_BIN_SIM $MIN_LTM_SIM
 
 echo "**** LigTMap target prediction is completed ****"
 echo 
@@ -137,3 +151,6 @@ cat Output/status.txt
 echo 
 echo "Result for each SMILES is stored in:"
 ls Output/Input_*/IFP_result.csv
+echo 
+echo "Best scores in:"
+ls Output/Input_*/bests.csv

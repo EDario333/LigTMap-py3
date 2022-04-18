@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DOWNLOAD_DIR=$1
+PROTEIN=$2
+
+mkdir -p $DOWNLOAD_DIR
+pdb_fetch $PROTEIN > $DOWNLOAD_DIR/$PROTEIN.pdb
