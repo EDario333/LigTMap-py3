@@ -18,7 +18,7 @@ LigTMap-py3 is being written on top of:
 
 ## INSTALLATION
 
-For convenience a shell bash script was prepared, available at [setup COMPONER LINK](https://poner link).
+For convenience a shell bash script was prepared, available at [`setup`](https://github.com/EDario333/LigTMap-py3/blob/master/setup).
 
 All the software project requirements were installed on Debian GNU/Linux 11 (bullseye), Linux kernel version 5.10.0-13-amd64.
 
